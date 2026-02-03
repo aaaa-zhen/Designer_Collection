@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Collection</title>
+  <style>
+    :root {
+      --bg: #f5f3ef;
+      --text: #222;
+      --text-secondary: #555;
+      --link: #222;
+      --link-hover: #666;
+      --border: #e0ded9;
+    }
+
+    [data-theme="dark"] {
+      --bg: #111;
+      --text: #eee;
+      --text-secondary: #aaa;
+      --link: #eee;
+      --link-hover: #ccc;
+      --border: #2a2a2a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 60px 24px;
+      max-width: 720px;
+      margin: 0 auto;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 48px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 8px;
+    }
+
+    .count {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .lang-toggle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      background: none;
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .lang-toggle:hover {
+      color: var(--text);
+      border-color: var(--text-secondary);
+    }
+
+    .theme-toggle {
+      width: 48px;
+      height: 26px;
+      background: var(--border);
+      border-radius: 13px;
+      cursor: pointer;
+      position: relative;
+      border: none;
+      transition: background 0.3s;
+    }
+
+    .theme-toggle::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: var(--bg);
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    [data-theme="dark"] .theme-toggle::after {
+      transform: translateX(22px);
+    }
+
+    section {
+      margin-bottom: 56px;
+    }
+
+    h2 {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .designer-list {
+      list-style: none;
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+    }
+
+    .designer-item {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      padding-bottom: 24px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .designer-preview {
+      width: 180px;
+      min-width: 180px;
+      height: 110px;
+      object-fit: cover;
+      object-position: top;
+      border-radius: 6px;
+      background: var(--border);
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+    }
+
+    .designer-preview.placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: var(--text-secondary);
+      background: var(--border);
+    }
+
+    .designer-item:hover .designer-preview {
+      transform: scale(1.03);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .designer-info {
+      flex: 1;
+    }
+
+    .designer-link {
+      color: var(--link);
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+    }
+
+    .designer-link::before {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--link);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .designer-link:hover::before {
+      opacity: 1;
+    }
+
+    .designer-link:hover {
+      color: var(--link-hover);
+    }
+
+    .designer-link:hover::before {
+      background: var(--link-hover);
+    }
+
+    .designer-link::after {
+      content: '↗';
+      font-size: 14px;
+      opacity: 0.5;
+    }
+
+    .designer-desc {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-top: 6px;
+      line-height: 1.6;
+    }
+
+    .designer-tags {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 11px;
+      color: var(--text-secondary);
+      background: var(--border);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    footer {
+      margin-top: 80px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 40px 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .designer-list {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .designer-item {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .designer-preview {
+        width: 100%;
+        height: 160px;
+      }
+
+      header {
+        flex-direction: column;
+        gap: 24px;
+        margin-bottom: 40px;
+      }
+
+      .controls {
+        align-self: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1 data-en="Design Collection" data-zh="设计师收藏">Design Collection</h1>
+      <p class="subtitle" data-en="A curated list of designers and their portfolios" data-zh="精选设计师作品集"></p>
+      <p class="count" data-en="25 designers" data-zh="25 位设计师">25 designers</p>
+    </div>
+    <div class="controls">
+      <button class="lang-toggle" onclick="toggleLang()">中 / EN</button>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"></button>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <h2 data-en="Designers" data-zh="设计师">Designers</h2>
+      <ul class="designer-list">
+        <li class="designer-item">
+          <img src="images/robb.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://robb.is/" target="_blank" class="designer-link">Robb Böhnke</a>
+            <p class="designer-desc" data-en="Berlin-based developer/designer who builds Linear's iOS app. He also gave a WWDC24 session on SwiftUI visual effects." data-zh="柏林的开发者/设计师，负责 Linear 的 iOS 端，也在 WWDC24 分享过 SwiftUI 视觉特效。"></p>
+            <div class="designer-tags">
+              <span class="tag">iOS</span>
+              <span class="tag">SwiftUI</span>
+              <span class="tag">Linear</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/yaniv.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://yaniv.mx/work" target="_blank" class="designer-link">Yaniv Fridman</a>
+            <p class="designer-desc" data-en="Motion Design Art Director at Apple, based in Mexico City." data-zh="在墨西哥城的 Apple 动效艺术总监，做 Motion Design。"></p>
+            <div class="designer-tags">
+              <span class="tag">Apple</span>
+              <span class="tag" data-en="Motion Design" data-zh="动态设计">Motion Design</span>
+              <span class="tag">Today at Apple</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/hansol.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://hansoljang.com/" target="_blank" class="designer-link">Hansol Jang</a>
+            <p class="designer-desc" data-en="Visual designer in California, now at Applied Intuition. Focuses on art direction, typography, and visual systems for brands like Apple and Samsung." data-zh="加州视觉设计师，目前在 Applied Intuition。擅长艺术指导、字体与视觉系统，做过 Apple、Samsung 等品牌项目。"></p>
+            <div class="designer-tags">
+              <span class="tag">Apple</span>
+              <span class="tag">iPhone Air</span>
+              <span class="tag">Mac mini</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/mike.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://mikematas.com/" target="_blank" class="designer-link">Mike Matas</a>
+            <p class="designer-desc" data-en="Designer and entrepreneur whose work shows up in iPhone/iPad, Facebook Paper, Nest, and Our Choice. Founded Push Pop Press and Lobe; now working with LoveFrom." data-zh="iPhone/iPad、Facebook Paper、Nest、Our Choice 这些项目里都有他的作品。创办过 Push Pop Press 和 Lobe，现在和 LoveFrom 合作。"></p>
+            <div class="designer-tags">
+              <span class="tag">iPhone</span>
+              <span class="tag">LoveFrom</span>
+              <span class="tag" data-en="Founder" data-zh="创业者">Founder</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/jason.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://jasonyuan.design/" target="_blank" class="designer-link">Jason Yuan</a>
+            <p class="designer-desc" data-en="Interface designer who thinks in metaphors. Studied theatre at Northwestern and graphic design at RISD, then worked at Sony Music and Apple; now building MakeSpace." data-zh="把界面当作隐喻来思考的设计师。西北大学学戏剧、RISD 学平面，之后在 Sony Music 和 Apple 工作，现在在做 MakeSpace。"></p>
+            <div class="designer-tags">
+              <span class="tag">MercuryOS</span>
+              <span class="tag">Apple</span>
+              <span class="tag">MakeSpace</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/rauno.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://rauno.me/" target="_blank" class="designer-link">Rauno Freiberg</a>
+            <p class="designer-desc" data-en="Estonian interaction designer working with Vercel and Devouring Details." data-zh="爱沙尼亚的交互设计师，目前与 Vercel 和 Devouring Details 合作。"></p>
+            <div class="designer-tags">
+              <span class="tag">Vercel</span>
+              <span class="tag" data-en="Design Engineer" data-zh="设计工程师">Design Engineer</span>
+              <span class="tag" data-en="Interaction" data-zh="交互">Interaction</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/will.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://willdanner.com/" target="_blank" class="designer-link">Will Danner</a>
+            <p class="designer-desc" data-en="Designer at Apple. Previously led Maps and Navigation design, and earlier worked on Uber Eats." data-zh="Apple 的设计师，之前负责 Maps/导航的设计管理，更早在 Uber Eats 做设计。"></p>
+            <div class="designer-tags">
+              <span class="tag">Apple</span>
+              <span class="tag">Maps</span>
+              <span class="tag">Uber Eats</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/philip.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://www.philipcdavis.com/" target="_blank" class="designer-link">Philip Davis</a>
+            <p class="designer-desc" data-en="Interface designer and software creator at Apple who loves apps, prototypes, and design experiments. Gave WWDC talks on SwiftUI design and visual effects." data-zh="Apple 的界面设计师和软件创作者，喜欢做 app、原型和设计实验，也在 WWDC 讲过 SwiftUI 设计和视觉特效。"></p>
+            <div class="designer-tags">
+              <span class="tag">Apple</span>
+              <span class="tag">SwiftUI</span>
+              <span class="tag">WWDC</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/gavin.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://nelson.co/" target="_blank" class="designer-link">Gavin Nelson</a>
+            <p class="designer-desc" data-en="Designer at OpenAI shaping ChatGPT; previously at Linear and GitHub. Big on ideas over opinions and prototyping as collaboration." data-zh="OpenAI 设计师，主要做 ChatGPT；之前在 Linear 和 GitHub。更看重想法与原型协作。"></p>
+            <div class="designer-tags">
+              <span class="tag">OpenAI</span>
+              <span class="tag">ChatGPT</span>
+              <span class="tag">Linear</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/janum.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://janum.co/" target="_blank" class="designer-link">Janum Trivedi</a>
+            <p class="designer-desc" data-en="Designer + engineer who's worked at The Browser Company, Netflix, and Apple." data-zh="设计 + 工程双修，做过 The Browser Company、Netflix 和 Apple。"></p>
+            <div class="designer-tags">
+              <span class="tag">iOS</span>
+              <span class="tag">Apple</span>
+              <span class="tag">The Browser Company</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/brandon.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="http://www.brandonwalkin.com/" target="_blank" class="designer-link">Brandon Walkin</a>
+            <p class="designer-desc" data-en="Apple design team designer who spoke at WWDC20 about the iPadOS pointer." data-zh="Apple 设计团队的设计师，在 WWDC20 分享过 iPadOS 指针设计。"></p>
+            <div class="designer-tags">
+              <span class="tag">OpenAI</span>
+              <span class="tag">Apple</span>
+              <span class="tag">HID</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/marcos.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="http://marcosalonso.com/" target="_blank" class="designer-link">Marcos Alonso</a>
+            <p class="designer-desc" data-en="Creator of Samplr, the iPad sampling app." data-zh="iPad 采样器 Samplr 的作者。"></p>
+            <div class="designer-tags">
+              <span class="tag">Apple</span>
+              <span class="tag">WWDC</span>
+              <span class="tag">Samplr</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/chan.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://www.chankarunamuni.com/" target="_blank" class="designer-link">Chan Karunamuni</a>
+            <p class="designer-desc" data-en="His site highlights work like Liquid Glass, Dynamic Island, and iPhone X gestural UI, plus a WWDC talk on fluid interfaces." data-zh="官网列的代表作有 Liquid Glass、Dynamic Island、iPhone X 手势 UI，也做过 WWDC 的流畅界面分享。"></p>
+            <div class="designer-tags">
+              <span class="tag">Apple</span>
+              <span class="tag">Liquid Glass</span>
+              <span class="tag">HID</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/ryhan.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://ryhan.me/" target="_blank" class="designer-link">Ryhan Hassan</a>
+            <p class="designer-desc" data-en="Software designer in San Francisco. As a Principal Designer at Figma, he led the UI3 redesign of the core editor." data-zh="旧金山的软件设计师，曾在 Figma 做 Principal Designer，主导 UI3 的核心编辑器重设。"></p>
+            <div class="designer-tags">
+              <span class="tag">OpenAI</span>
+              <span class="tag">Figma</span>
+              <span class="tag">UI3</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/minsang.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://minsangchoi.com/" target="_blank" class="designer-link">Minsang Choi</a>
+            <p class="designer-desc" data-en="Product designer at Meta with 10+ years of experience and a love for SwiftUI prototyping. Worked on Google Lens Multisearch and related frameworks." data-zh="Meta 产品设计师，10+ 年经验，爱用 SwiftUI 做原型；曾在 Google 做 Lens Multisearch 等项目。"></p>
+            <div class="designer-tags">
+              <span class="tag">Meta</span>
+              <span class="tag">Google Lens</span>
+              <span class="tag">SwiftUI</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/nao.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://www.naoenomoto.com/" target="_blank" class="designer-link">Nao Enomoto</a>
+            <p class="designer-desc" data-en="Designer behind small, playful apps and interaction experiments like Droplay!, Minipocket, and memome." data-zh="做小而巧的应用和交互实验，比如 Droplay!、Minipocket、memome。"></p>
+            <div class="designer-tags">
+              <span class="tag">Japan</span>
+              <span class="tag">Icons</span>
+              <span class="tag">Apps</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/gunnar.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://www.gunnargray.com/" target="_blank" class="designer-link">Gunnar Gray</a>
+            <p class="designer-desc" data-en="Multidisciplinary designer in Minneapolis, currently Product Design Lead at Perplexity." data-zh="明尼阿波利斯的多学科设计师，现任 Perplexity 的产品设计负责人。"></p>
+            <div class="designer-tags">
+              <span class="tag">Perplexity</span>
+              <span class="tag">Artifact</span>
+              <span class="tag">MetaLab</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/dan.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://www.makingsoftware.com/" target="_blank" class="designer-link">Dan Hollick</a>
+            <p class="designer-desc" data-en="Writing and illustrating Making Software, a reference manual for people who design and build software." data-zh="在写并绘制《Making Software》，一本面向软件设计与开发者的参考手册。"></p>
+            <div class="designer-tags">
+              <span class="tag">Tailwind</span>
+              <span class="tag">Raycast</span>
+              <span class="tag" data-en="Writing" data-zh="写作">Writing</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/paco.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://paco.me/" target="_blank" class="designer-link">Paco Coursey</a>
+            <p class="designer-desc" data-en="Crafting interfaces at Linear; previously built Vercel's design system, website, and dashboard. Made Cmd-K, Next Themes, and Writer." data-zh="在 Linear 做界面，之前负责 Vercel 的设计系统、官网和仪表盘；做过 Cmd-K、Next Themes、Writer。"></p>
+            <div class="designer-tags">
+              <span class="tag">Linear</span>
+              <span class="tag">Vercel</span>
+              <span class="tag">⌘K</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/andy.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://andymatuschak.org/" target="_blank" class="designer-link">Andy Matuschak</a>
+            <p class="designer-desc" data-en="Independent applied researcher building tools for thought and an augmented book. Previously helped build iOS at Apple and led R&D at Khan Academy." data-zh="独立研究者，做 tools for thought 和增强型书籍；之前参与 iOS，并在 Khan Academy 负责研发。"></p>
+            <div class="designer-tags">
+              <span class="tag">Apple</span>
+              <span class="tag">Khan Academy</span>
+              <span class="tag">Tools for Thought</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/edward.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://edwardsanchez.design/" target="_blank" class="designer-link">Edward Sanchez</a>
+            <p class="designer-desc" data-en="UI designer and developer with 25+ years of experience, including 9 years at Apple. Loves iconography, animation, and Swift.Õ+ 年的 UI 设计/开发经验，其中 9 年在 Apple；喜欢图标、动效和 Swift。"></p>
+            <div class="designer-tags">
+              <span class="tag">Apple</span>
+              <span class="tag">Swift</span>
+              <span class="tag">Icons</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <div class="designer-preview placeholder">No Preview</div>
+          <div class="designer-info">
+            <a href="https://chenglou.me/" target="_blank" class="designer-link">Cheng Lou</a>
+            <p class="designer-desc" data-en="Worked on React, Messenger, ReasonML, ReScript, and Midjourney." data-zh="做过 React、Messenger、ReasonML、ReScript 以及 Midjourney。"></p>
+            <div class="designer-tags">
+              <span class="tag">Midjourney</span>
+              <span class="tag">React</span>
+              <span class="tag">ReasonML</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/brian.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://brianlovin.com/" target="_blank" class="designer-link">Brian Lovin</a>
+            <p class="designer-desc" data-en="Software designer in San Francisco, currently making AI products at Notion. Created App Dissection, Design Details, and Staff Design." data-zh="旧金山的软件设计师，在 Notion 做 AI 产品；做过 App Dissection、Design Details 播客和 Staff Design。"></p>
+            <div class="designer-tags">
+              <span class="tag">Notion</span>
+              <span class="tag">Design Details</span>
+              <span class="tag">Staff Design</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/jonathan.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://jonathanravasz.com/" target="_blank" class="designer-link">Jonathan Ravasz</a>
+            <p class="designer-desc" data-en="Designer at Apple, prototyping humane interfaces; worked on visionOS widgets and Apple Vision Pro. Previously built hand input for Oculus Quest." data-zh="Apple 的设计师，做 visionOS 小组件和 Vision Pro 的交互原型；之前做过 Oculus Quest 的手部输入。"></p>
+            <div class="designer-tags">
+              <span class="tag">Apple</span>
+              <span class="tag">Vision Pro</span>
+              <span class="tag">Oculus</span>
+            </div>
+          </div>
+        </li>
+        <li class="designer-item">
+          <img src="images/nathan.png" alt="" class="designer-preview">
+          <div class="designer-info">
+            <a href="https://nathangitter.com/" target="_blank" class="designer-link">Nathan Gitter</a>
+            <p class="designer-desc" data-en="Designer + engineer doing Human Interface Design at Apple, with a focus on prototyping." data-zh="Apple 的设计/工程双修，偏原型与交互。"></p>
+            <div class="designer-tags">
+              <span class="tag">Apple</span>
+              <span class="tag">Vision Pro</span>
+              <span class="tag">visionOS</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p data-en="Last updated: 2026" data-zh="最后更新：2026"></p>
+  </footer>
+
+  <script>
+    let currentLang = localStorage.getItem('lang') || 'en';
+
+    function toggleTheme() {
+      const body = document.body;
+      const currentTheme = body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      body.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    }
+
+    function toggleLang() {
+      currentLang = currentLang === 'en' ? 'zh' : 'en';
+      localStorage.setItem('lang', currentLang);
+      applyLang();
+    }
+
+    function applyLang() {
+      const elements = document.querySelectorAll('[data-en][data-zh]');
+      elements.forEach(el => {
+        el.textContent = el.getAttribute(`data-${currentLang}`);
+      });
+    }
+
+    // Load saved preferences
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.body.setAttribute('data-theme', savedTheme);
+    }
+
+    applyLang();
+  </script>
+</body>
+</html>
